@@ -1,19 +1,27 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{title}} — Fuel Manager</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  {{!-- TODO: nav bar (show username + logout form when user is logged in) --}}
-  <nav>
-    <a href="/">Fuel Manager</a>
-  </nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{title}} — Fuel Manager</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <nav>
+      <a href="/">Fuel Manager</a>
+      {{#if user}}
+        <span>Welcome, {{user.username}}</span>
+        <form method="POST" action="/logout" style="display:inline">
+          <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+          <button type="submit">Logout</button>
+        </form>
+      {{else}}
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      {{/if}}
+    </nav>
 
-  <main>
-    {{{body}}}
-  </main>
-</body>
+    <main>
+      {{{body}}}
+    </main>
+  </body>
 </html>
