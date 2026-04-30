@@ -48,6 +48,13 @@ exports.postRegister = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await userModel.create({ username, password });
+    if (!user) {
+      return res.status(400).render("register", {
+        title: "Register",
+        error: "Username already taken",
+        csrfToken: req.csrfToken(),
+      });
+    }
     req.session.user = { id: user.id, username: user.username };
     res.redirect("/dashboard");
   } catch (err) {

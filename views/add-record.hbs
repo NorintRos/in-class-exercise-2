@@ -1,3 +1,48 @@
-{{!-- TODO: form fields: date, vehicleType (Car/Motorcycle), liters, distanceKm, totalCost --}}
-{{!-- Include hidden _csrf field --}}
-<h1>Add Record</h1>
+<nav class="subnav">
+  <a href="/dashboard" class="subnav__link">Dashboard</a>
+  <a href="/records/new" class="subnav__link subnav__link--active">Add record</a>
+  <a href="/stats" class="subnav__link">Statistics</a>
+</nav>
+
+<h1 class="page-title">Log a fill-up</h1>
+
+{{#if error}}
+<div class="alert alert--error" role="alert">{{error}}</div>
+{{/if}}
+
+<form method="POST" action="/records" class="stack-form card card--narrow">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+  <label class="field">
+    <span class="field__label">Date</span>
+    <input type="date" name="date" required class="field__control" value="{{form.date}}" />
+  </label>
+
+  <fieldset class="field">
+    <legend class="field__label">Vehicle type</legend>
+    <div class="field__radios">
+      <label><input type="radio" name="vehicleType" value="Car" required {{#if (eq form.vehicleType 'Motorcycle')}} {{else}} checked{{/if}} /> Car</label>
+      <label><input type="radio" name="vehicleType" value="Motorcycle" {{#if (eq form.vehicleType 'Motorcycle')}}checked{{/if}} /> Motorcycle</label>
+    </div>
+  </fieldset>
+
+  <label class="field">
+    <span class="field__label">Liters</span>
+    <input type="number" name="liters" step="0.01" min="0" placeholder="45" required class="field__control" value="{{form.liters}}" />
+  </label>
+
+  <label class="field">
+    <span class="field__label">Distance traveled (km)</span>
+    <input type="number" name="distanceKm" step="0.01" min="0" placeholder="620" required class="field__control" value="{{form.distanceKm}}" />
+  </label>
+
+  <label class="field">
+    <span class="field__label">Total cost ($)</span>
+    <input type="number" name="totalCost" step="0.01" min="0" placeholder="112.50" required class="field__control" value="{{form.totalCost}}" />
+  </label>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn--primary">Save record</button>
+    <a href="/dashboard" class="btn btn--ghost">Cancel</a>
+  </div>
+</form>

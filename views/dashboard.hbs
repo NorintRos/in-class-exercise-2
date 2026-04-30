@@ -1,3 +1,57 @@
-{{!-- TODO: table listing all records with Edit and Delete actions --}}
-{{!-- Delete action must use a POST form with hidden _csrf field --}}
-<h1>Dashboard</h1>
+<nav class="subnav">
+  <a href="/dashboard" class="subnav__link subnav__link--active">Dashboard</a>
+  <a href="/records/new" class="subnav__link">Add record</a>
+  <a href="/stats" class="subnav__link">Statistics</a>
+</nav>
+
+<h1 class="page-title">Your fuel records</h1>
+
+{{#unless records.length}}
+<div class="empty-state">
+  <p>No trips logged yet.</p>
+  <a href="/records/new" class="btn btn--primary">Log your first record</a>
+</div>
+{{else}}
+<p class="lede">Showing <strong>{{records.length}}</strong> record(s), newest first</p>
+
+<div class="table-responsive">
+<table class="data-table">
+  <thead>
+    <tr>
+      <th scope="col">Date</th>
+      <th scope="col">Vehicle</th>
+      <th scope="col" class="num">Liters</th>
+      <th scope="col" class="num">Distance (km)</th>
+      <th scope="col" class="num">Cost ($)</th>
+      <th scope="col" class="num">km/L</th>
+      <th scope="col" class="col-actions">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each records}}
+    <tr>
+      <td data-label="Date">{{formatDate date}}</td>
+      <td data-label="Vehicle">
+        {{#if (eq vehicleType 'Car')}}
+          <span class="badge badge--car">{{vehicleType}}</span>
+        {{else}}
+          <span class="badge badge--motorcycle">{{vehicleType}}</span>
+        {{/if}}
+      </td>
+      <td data-label="Liters" class="num">{{toFixed liters 2}}</td>
+      <td data-label="Distance" class="num">{{toFixed distanceKm 2}}</td>
+      <td data-label="Cost" class="num">{{toFixed totalCost 2}}</td>
+      <td data-label="km/L" class="num">{{toFixed kmPerLiter 3}}</td>
+      <td class="col-actions actions">
+        <a href="/records/{{id}}/edit" class="btn btn--sm btn--ghost">Edit</a>
+        <form method="POST" action="/records/{{id}}/delete" class="inline-form">
+          <input type="hidden" name="_csrf" value="{{@root.csrfToken}}" />
+          <button type="submit" class="btn btn--sm btn--danger btn--bare">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+{{/unless}}

@@ -1,3 +1,48 @@
-{{!-- TODO: same fields as add-record, pre-filled from {{record}} --}}
-{{!-- Include hidden _csrf field --}}
-<h1>Edit Record</h1>
+<nav class="subnav">
+  <a href="/dashboard" class="subnav__link">Dashboard</a>
+  <a href="/records/new" class="subnav__link">Add record</a>
+  <a href="/stats" class="subnav__link">Statistics</a>
+</nav>
+
+<h1 class="page-title">Edit record</h1>
+
+{{#if error}}
+<div class="alert alert--error" role="alert">{{error}}</div>
+{{/if}}
+
+<form method="POST" action="/records/{{record.id}}" class="stack-form card card--narrow">
+  <input type="hidden" name="_csrf" value="{{csrfToken}}" />
+
+  <label class="field">
+    <span class="field__label">Date</span>
+    <input type="date" name="date" required class="field__control" value="{{f.date}}" />
+  </label>
+
+  <fieldset class="field">
+    <legend class="field__label">Vehicle type</legend>
+    <div class="field__radios">
+      <label><input type="radio" name="vehicleType" value="Car" required {{#if (eq f.vehicleType 'Motorcycle')}} {{else}} checked{{/if}} /> Car</label>
+      <label><input type="radio" name="vehicleType" value="Motorcycle" {{#if (eq f.vehicleType 'Motorcycle')}}checked{{/if}} /> Motorcycle</label>
+    </div>
+  </fieldset>
+
+  <label class="field">
+    <span class="field__label">Liters</span>
+    <input type="number" name="liters" step="0.01" min="0" required class="field__control" value="{{f.liters}}" />
+  </label>
+
+  <label class="field">
+    <span class="field__label">Distance traveled (km)</span>
+    <input type="number" name="distanceKm" step="0.01" min="0" required class="field__control" value="{{f.distanceKm}}" />
+  </label>
+
+  <label class="field">
+    <span class="field__label">Total cost ($)</span>
+    <input type="number" name="totalCost" step="0.01" min="0" required class="field__control" value="{{f.totalCost}}" />
+  </label>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn--primary">Update record</button>
+    <a href="/dashboard" class="btn btn--ghost">Back to dashboard</a>
+  </div>
+</form>
