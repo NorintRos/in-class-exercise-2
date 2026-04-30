@@ -57,9 +57,26 @@ app.use((req, res, next) => {
   next();
 });
 
+// Root URL (no GET / existed before — browsers showed "Cannot GET /")
+app.get('/', (req, res) => {
+  if (req.session.user) return res.redirect('/dashboard');
+  res.redirect('/login');
+});
+
 // Web routes
 app.use('/', webAuthRoutes);
 app.use('/', webRecordRoutes);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)).on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ Port ${PORT} is already in use (EADDRINUSE).`);
+    console.error(`   Either stop the other app using that port, or start with a different one, e.g.:`);
+    console.error(`     PORT=3001 npm start   (Git Bash)`);
+    console.error(`     $env:PORT=3001; npm start   (PowerShell)`);
+    console.error(`   To find the PID on Windows: cmd.exe //c "netstat -ano | findstr :${PORT}"\n`);
+    process.exit(1);
+  }
+  throw err;
+});

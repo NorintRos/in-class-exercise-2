@@ -4,9 +4,12 @@ const sessionAuth = require('../middleware/sessionAuth');
 
 const router = Router();
 
-// TODO: apply sessionAuth to all routes below
-// TODO: wire up GET /dashboard, GET /records/new, POST /records,
-//       GET /records/:id/edit, POST /records/:id, POST /records/:id/delete,
-//       GET /stats
+router.get('/dashboard', sessionAuth, recordController.getDashboard);
+router.get('/records/new', sessionAuth, recordController.getAddRecord);
+router.post('/records', sessionAuth, recordController.postAddRecord);
+router.get('/records/:id/edit', sessionAuth, recordController.getEditRecord);
+router.post('/records/:id', sessionAuth, recordController.postUpdateRecord);
+router.post('/records/:id/delete', sessionAuth, recordController.deleteRecord);
+router.get('/stats', sessionAuth, recordController.getStats);
 
 module.exports = router;

@@ -1,3 +1,69 @@
-{{!-- TODO: two tables — weekly totals and monthly totals --}}
-{{!-- Data comes from {{weekly}} and {{monthly}} arrays passed by the controller --}}
-<h1>Statistics</h1>
+<nav class="subnav">
+  <a href="/dashboard" class="subnav__link">Dashboard</a>
+  <a href="/records/new" class="subnav__link">Add record</a>
+  <a href="/stats" class="subnav__link subnav__link--active">Statistics</a>
+</nav>
+
+<h1 class="page-title">Fuel spending overview</h1>
+
+<p class="lede">Totals grouped by week and calendar month.</p>
+
+<div class="stats-grid">
+
+  <section class="stats-card">
+    <h2 class="stats-card__title">Weekly totals</h2>
+    {{#unless weekly.length}}
+    <p class="muted">No weekly data yet — add trips on the dashboard.</p>
+    {{else}}
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">Week</th>
+            <th scope="col" class="num">Fuel (L)</th>
+            <th scope="col" class="num">Cost ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each weekly}}
+          <tr>
+            <td>{{period}}</td>
+            <td class="num">{{toFixed totalLiters 2}}</td>
+            <td class="num">{{toFixed totalCost 2}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/unless}}
+  </section>
+
+  <section class="stats-card">
+    <h2 class="stats-card__title">Monthly totals</h2>
+    {{#unless monthly.length}}
+    <p class="muted">No monthly data yet — add trips on the dashboard.</p>
+    {{else}}
+    <div class="table-responsive">
+      <table class="data-table data-table--accent">
+        <thead>
+          <tr>
+            <th scope="col">Month</th>
+            <th scope="col" class="num">Fuel (L)</th>
+            <th scope="col" class="num">Cost ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each monthly}}
+          <tr>
+            <td>{{period}}</td>
+            <td class="num">{{toFixed totalLiters 2}}</td>
+            <td class="num">{{toFixed totalCost 2}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/unless}}
+  </section>
+
+</div>
